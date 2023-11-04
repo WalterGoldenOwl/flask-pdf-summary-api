@@ -115,37 +115,7 @@ def pdfsummary():
 
         summary_content = '\n\n'.join(result)
 
-        
-        chunks = textwrap.wrap(summary_content, 3000)
-
-        # Write notes from chunks
-        result = []  # Store notes
-        result2 = []  # Store notes summaries
-        for i, chunk in enumerate(chunks):
-            with open("pdfprompt2.txt", 'r', encoding='utf-8') as infile:
-                prompt = infile.read()
-            prompt = prompt.replace("<<NOTES>>", chunk)
-            notes = gpt_3(prompt)
-            result.append(notes)
-
-            keytw = open_file('pdfprompt3.txt').replace('<<NOTES>>', chunk)
-            keytw2 = gpt_3(keytw)
-            result2.append(keytw2)
-
-        # Convert the lists to strings
-        notes_string = "\n\n".join(result)
-        study_guide_string = "\n\n".join(result2)
-
-        # Use the summary of notes for further processing
-        essential1 = open_file('pdfprompt4.txt').replace('<<NOTES>>', study_guide_string)
-        essential2 = gpt_3(essential1)
-
-        result = {
-            'summary': summary_content,
-            'notes': notes_string,
-            'notes_summary': study_guide_string,
-            'essential_info': essential2
-        }
+        result = { 'summary': summary_content}
 
          # Delete the uploaded PDF files and the converted .txt files
         for pdf_file in pdf_files:
@@ -168,4 +138,5 @@ def pdfsummary():
 
 #Run the Flask application
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run(host="192.168.1.219")
+    # app.run(debug=True, port=8000)
